@@ -1,0 +1,93 @@
+---
+title: "Project Proposal"
+author: "Nilutpaul Sarker Yash, Grace Schmitt, Sarah Bass, Kate Passwater"
+output: html_document
+---
+
+# Research Topic
+
+Healthcare Insurance and Factors Affecting the Cost of Insurance for a Person
+
+# Team Members
+
+- Nilutpaul Sarker Yash
+- Grace Schmitt
+- Sarah Bass
+- Kate Passwater
+
+# Dataset
+
+We are using the following dataset: https://www.kaggle.com/datasets/willianoliveiragibin/healthcare-insurance?select=insurance.csv
+
+``` {r}
+dat <- read.csv("C:/Users/seb46/Downloads/insurance.csv")
+
+head(dat)
+str(dat)
+
+sum(is.na(dat$age))
+sum(is.na(dat$sex))
+sum(is.na(dat$bmi))
+sum(is.na(dat$children))
+sum(is.na(dat$smoker))
+sum(is.na(dat$region))
+sum(is.na(dat$charges))
+
+library(ggplot2)
+```
+
+
+# Data Description
+
+The dataset contains information on the insurance costs of individuals and their personal attributes, such as age, sex, BMI, number of children, smoking status, and region. The initial data cleaning steps we expect at this point are checking the variable types, looking for missing values, and separating each factor with insurance cost to analyze each trend.
+
+# Project Idea / Research Questions
+
+We have thought of 6 potential research questions from the data to this point. They include:
+
+a)	Age and Charges - Is there a relationship between age and insurance charges? -Kate
+
+b)	Sex and Charges – Do insurance charges differ by sex? -Yash
+
+c)	BMI and Charges - Is there a relationship between BMI and insurance charges? + is there a threshold where charges increase significantly -Yash
+
+d)	Smoker and Charges - Does smoking increase insurance charges? -Grace
+
+e)	Children and Charges - Does insurance cost change with the number of dependents?- Sarah
+
+f)	Region and Charges - Are insurance charges greater in certain regions? -Kate
+
+g) Age and Smoking- are older smokers charged more than those younger -Sarah
+
+h) Smoking and region- Do smokers in certain regions get charged more -Grace
+
+# Planned Analyses / Visualizations
+
+Initially, we plan to use simple visualizations to observe trends in the data. We expect to use scatterplots, boxplots, and bar charts to compare variables and better understand patterns or possible outliers.
+
+```{r}
+#for e
+ggplot(dat, aes(x=factor(children), y=charges, fill=children)) +
+  geom_boxplot() +
+  labs( title= "Charges vs Number of Children",
+        x= "Number of Children",
+        y= "Charges ($)") + 
+  theme_minimal()
+
+```
+#The median charges seem to increase as the number of children increase, up until 5, where the median charges drop. From 3-5 children, the range decreases. For 0-1 children, the range and IQR of charges are similar. So charges typically increase as number of children increase, until 5 children, where charges were much less than charges for families with less children.
+
+for g 
+```{r}
+smoke_dat<- dat %>%
+  filter(smoker== "yes")
+
+ggplot(dat, aes(x=age, y= charges, color= factor(age))) +
+  geom_point() +
+  facet_wrap(~smoker)+
+  theme_bw() +
+  labs( title= "Charges vs. Age by Smoking Status", 
+          x= "Age",
+        y= "Charges ($)")
+```
+#it can be seen that non smokers have lower baseline charges than smokers, and both group's charges increase as age increases. 

@@ -1,0 +1,131 @@
+---
+title: "Project Proposal"
+author: "Nilutpaul Sarker Yash, Grace Schmitt, Sarah Bass, Kate Passwater"
+output: html_document
+---
+
+# Research Topic
+
+Healthcare Insurance and Factors Affecting the Cost of Insurance for a Person
+
+# Team Members
+
+- Nilutpaul Sarker Yash
+- Grace Schmitt
+- Sarah Bass
+- Kate Passwater
+
+# Dataset
+
+We are using the following dataset: https://www.kaggle.com/datasets/willianoliveiragibin/healthcare-insurance?select=insurance.csv
+
+# Data Description
+
+The dataset contains information on the insurance costs of individuals and their personal attributes, such as age, sex, BMI, number of children, smoking status, and region. The initial data cleaning steps we expect at this point are checking the variable types, looking for missing values, and separating each factor with insurance cost to analyze each trend.
+
+# Project Idea / Research Questions
+
+We have thought of 8 potential research questions from the data to this point. They include:
+
+a)	Age and Charges - Is there a relationship between age and insurance charges? -Kate
+
+b)	Sex and Charges – Do insurance charges differ by sex? -Yash
+
+c)	BMI and Charges - Is there a relationship between BMI and insurance charges? + is there a threshold where charges increase significantly -Yash
+
+d)	Smoker and Charges - Does smoking increase insurance charges? -Grace
+
+e)	Children and Charges - Does insurance cost change with the number of dependents?- Sarah
+
+f)	Region and Charges - Are insurance charges greater in certain regions? -Kate
+
+g) Age and Smoking- are older smokers charged more than those younger -Sarah
+
+h) Smoking and region- Do smokers in certain regions get charged more -Grace
+
+
+# Planned Analyses / Visualizations
+
+Initially, we plan to use simple visualizations to observe trends in the data. We expect to use scatterplots, boxplots, and bar charts to compare variables and better understand patterns or possible outliers.
+
+
+# Yash's work
+
+```{r}
+library(tidyverse)
+
+insurance <- read.csv("insurance.csv")
+
+# Check structure
+glimpse(insurance)
+
+# Convert categorical variables to factors
+insurance <- insurance %>%
+  mutate(
+    sex = factor(sex),
+    smoker = factor(smoker),
+    region = factor(region)
+  )
+
+insurance <- insurance %>%
+  mutate(
+    sex = factor(sex),
+    smoker = factor(smoker),
+    region = factor(region)
+  )
+
+glimpse(insurance)
+```
+
+```{r}
+insurance %>%
+  ggplot(aes(x = sex, y = charges, fill = sex)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Insurance Charges by Sex",
+    x = "Sex",
+    y = "Insurance Charges"
+  ) +
+  theme_light(base_size = 16) +
+  theme(legend.position = "none")
+```
+
+- The boxplot comparing insurance charges by sex shows that males tend to have a slightly higher median insurance charge than females. Additionally, the variability in charges appears greater for males, as indicated by a wider spread of the data. Both groups feature multiple high-cost outliers, suggesting that some individuals face significantly higher expenses regardless of sex. Overall, sex is not a strong predictor of insurance charges because the distributions for males and females largely overlap, and the variability within each group is high, meaning that knowing a person’s sex does not provide much information about their expected insurance cost.
+
+```{r}
+insurance %>%
+  ggplot(aes(x = bmi, y = charges, color = bmi)) +
+  geom_point(alpha = 0.6) +
+  scale_color_gradient(low = "#56B1F7", high = "#132B43") +
+  labs(
+    title = "BMI vs Insurance Charges",
+    x = "BMI",
+    y = "Charges",
+    color = "BMI"
+  ) +
+  theme_light(base_size = 16)
+```
+
+- The scatterplot of BMI versus insurance charges shows a weak to moderate positive relationship, where higher BMI values are generally associated with higher insurance charges. However, there is substantial variability in charges across all BMI levels, indicating that BMI alone is not a strong predictor of insurance cost. Notably, there is a clear clustering of higher charges among individuals with BMI values around and above 30, suggesting a potential threshold effect where insurance costs increase more sharply beyond this point.
+
+```{r}
+insurance <- insurance %>%
+  mutate(bmi_group = ifelse(bmi >= 30, "BMI ≥ 30", "BMI < 30"))
+
+insurance %>%
+  ggplot(aes(x = bmi_group, y = charges, fill = bmi_group)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(
+    title = "Insurance Charges by BMI Category",
+    x = "BMI Category",
+    y = "Charges"
+  ) +
+  theme_light(base_size = 16) +
+  theme(legend.position = "none")
+```
+
+- The scatterplot of BMI versus insurance charges was used to explore the relationship between the two variables and shows a weak to moderate positive trend, where higher BMI values are generally associated with higher insurance charges. However, there is substantial variability across all BMI levels, indicating that BMI alone is not a strong predictor of insurance cost. While examining the plot, I noticed a clustering of higher charges among individuals with BMI values around and above 30, suggesting a potential threshold effect.
+
+- To further investigate this observation, I grouped the data into two categories (individuals with BMI < 30 and individuals with BMI ≥ 30) and visualized the distributions using a boxplot. The boxplot confirms that individuals with BMI ≥ 30 tend to have higher median charges, greater variability, and more extreme high-cost values. Overall, while BMI does not strongly predict insurance charges in a strictly linear sense, it exhibits a clear threshold effect beyond a BMI of 30, where costs increase more sharply.

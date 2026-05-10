@@ -1,0 +1,449 @@
+---
+title: "Healthcare_Insurance"
+author: Nilutpaul Sarker Yash, Sarah Bass, Grace Schmitt, Kate Passwater
+output: html_document
+date: "2026-05-05"
+---
+
+# Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(corrplot)
+
+insurance <- read.csv("insurance.csv")
+```
+
+## Exploratory Correlation Analysis
+
+```{r}
+# Correlation matrix for numeric variables
+insurance_numeric <- insurance %>%
+  select(age, bmi, children, charges)
+
+cor_matrix <- cor(insurance_numeric)
+
+cor_matrix
+```
+
+```{r}
+corrplot(
+  cor_matrix,
+  method = "color",
+  type = "upper",
+  addCoef.col = "black",
+  tl.col = "black",
+  tl.srt = 45,
+  number.cex = 0.8,
+  title = "Correlation Matrix of Numeric Insurance Variables",
+  mar = c(0, 0, 2, 0)
+)
+```
+
+# Exploratory Correlation Analysis
+
+- The correlation matrix and heatmap provide an overview of the linear relationships between the numerical variables in the dataset. Age shows the strongest positive relationship with insurance charges, followed by BMI, while the number of children has only a weak relationship with charges.
+
+- Although age and BMI both display positive correlations with insurance cost, none of the variables individually demonstrate an extremely strong linear relationship. This suggests that insurance charges are likely influenced by multiple interacting factors rather than a single dominant variable. The correlation analysis provides a useful foundation for the more detailed visual analyses presented throughout the project.
+
+# Yash's Section
+
+```{r}
+library(tidyverse)
+library(corrplot)
+
+insurance <- read.csv("insurance.csv")
+
+# Check structure
+glimpse(insurance)
+
+# Convert categorical variables to factors
+insurance <- insurance %>%
+  mutate(
+    sex = factor(sex),
+    smoker = factor(smoker),
+    region = factor(region)
+  )
+
+glimpse(insurance)
+```
+- Before beginning the analysis, the structure of the dataset was examined using the `glimpse()` function to verify variable types and overall data organization. The dataset contains 1,338 observations and 7 variables, including both numerical variables (age, BMI, number of children, and insurance charges) and categorical variables (sex, smoking status, and region). 
+
+- The categorical variables were converted into factors to ensure they were treated appropriately in the visualizations and analyses. This preprocessing step improves the readability of plots and allows categorical comparisons to be handled correctly throughout the project.
+
+```{r}
+insurance %>%
+  ggplot(aes(x = sex, y = charges, fill = sex)) +
+  geom_violin(alpha = 0.55, trim = FALSE) +
+  geom_boxplot(width = 0.18, alpha = 0.8, color = "black") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Distribution of Insurance Charges by Sex",
+    subtitle = "Violin plots show the full distribution while boxplots highlight median and spread",
+    x = "Sex",
+    y = "Insurance Charges"
+  ) +
+  theme_light(base_size = 16) +
+  theme(legend.position = "none")
+```
+
+- The violin and boxplot visualization compares the distribution of insurance charges between males and females. The violin plots provide a clearer picture of the overall distribution density, while the boxplots highlight the median, interquartile range, and potential outliers. 
+
+- The distributions for males and females overlap heavily, suggesting that sex alone is not a strong predictor of insurance charges. However, males appear to have a slightly higher median charge and a somewhat larger spread in the upper range of the distribution. Both groups also contain several extreme high-cost outliers, indicating that some individuals experience substantially larger insurance expenses regardless of sex.
+
+- The shape of the violin plots further shows that most individuals in both groups fall within the lower to mid-range charge values, while a smaller portion of the population accounts for very high insurance costs. Overall, the visualization suggests that although there are slight differences between males and females, the variability within each group is much larger than the difference between the groups themselves.
+
+```{r}
+insurance %>%
+  ggplot(aes(x = sex, y = charges, fill = sex)) +
+  geom_boxplot(alpha = 0.75) +
+  facet_wrap(~ smoker) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Insurance Charges by Sex and Smoking Status",
+    subtitle = "Faceting by smoking status helps compare sex differences within smoker groups",
+    x = "Sex",
+    y = "Insurance Charges"
+  ) +
+  theme_light(base_size = 16) +
+  theme(legend.position = "none")
+```
+
+- To better understand whether sex meaningfully affects insurance charges, the data was further separated by smoking status using faceted boxplots. This visualization provides a more detailed comparison by examining males and females within smoker and non-smoker groups separately.
+
+- Among non-smokers, males and females have very similar distributions of insurance charges, with only small differences in median values and overall spread. This suggests that sex alone has little effect on insurance costs when individuals do not smoke. In contrast, the smoker group shows dramatically higher insurance charges for both sexes, with much larger medians and substantially greater variability.
+
+- Within the smoker category, males appear to have a slightly higher median insurance charge than females, although the distributions still overlap considerably. The large increase in charges between smokers and non-smokers is far more significant than the relatively small differences observed between males and females. This indicates that smoking status is a much stronger predictor of insurance charges than sex.
+
+- Overall, the faceted analysis strengthens the earlier conclusion that sex has only a limited relationship with insurance cost, while smoking status plays a major role in determining higher insurance expenses.
+
+```{r}
+insurance %>%
+  ggplot(aes(x = bmi, y = charges, color = smoker)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 1.1) +
+  scale_color_brewer(palette = "Set1") +
+  labs(
+    title = "BMI and Insurance Charges by Smoking Status",
+    subtitle = "Smoking status separates the relationship between BMI and charges more clearly",
+    x = "BMI",
+    y = "Insurance Charges",
+    color = "Smoker"
+  ) +
+  theme_light(base_size = 16)
+```
+
+
+- The scatterplot examines the relationship between BMI and insurance charges while also separating individuals by smoking status. Adding smoking status to the visualization makes the relationship between BMI and charges much clearer and reveals a strong interaction between the two variables.
+
+- For non-smokers, insurance charges remain relatively low across most BMI values, and the regression line shows only a weak positive relationship between BMI and charges. Although some variation exists, most non-smokers fall within a lower charge range even as BMI increases.
+
+- In contrast, smokers exhibit substantially higher insurance charges overall, along with a much steeper upward trend as BMI increases. The regression line for smokers suggests that insurance costs rise significantly faster with increasing BMI compared to non-smokers. Smokers with higher BMI values are especially concentrated in the highest charge ranges of the dataset.
+
+- The visualization also highlights the presence of several high-cost outliers among smokers, particularly for BMI values above 30. This suggests that smoking status amplifies the effect of BMI on insurance expenses. Overall, the plot indicates that while BMI has some relationship with insurance charges, smoking status plays a major role in strengthening and separating that relationship.
+
+```{r}
+insurance <- insurance %>%
+  mutate(
+    bmi_group = ifelse(bmi >= 30, "BMI ≥ 30", "BMI < 30")
+  )
+```
+
+
+
+```{r}
+
+insurance %>%
+  ggplot(aes(x = bmi_group, y = charges, fill = bmi_group)) +
+  geom_violin(alpha = 0.55, trim = FALSE) +
+  geom_boxplot(width = 0.15, alpha = 0.85, color = "black") +
+  scale_fill_brewer(palette = "Set1") +
+  labs(
+    title = "Insurance Charges by BMI Threshold",
+    subtitle = "BMI 30 is used as a possible threshold for higher insurance charges",
+    x = "BMI Category",
+    y = "Insurance Charges"
+  ) +
+  theme_light(base_size = 16) +
+  theme(legend.position = "none")
+```
+
+- To further investigate the relationship between BMI and insurance charges, BMI values were divided into two categories using a threshold of 30. This threshold was selected because a BMI of 30 is commonly associated with obesity classifications and appeared to represent a noticeable shift in the earlier scatterplot analysis.
+
+- The violin and boxplot visualization shows that individuals with BMI values greater than or equal to 30 generally experience higher insurance charges than those with BMI values below 30. The BMI ≥ 30 group has a slightly higher median charge, a wider interquartile range, and substantially more variability overall. In addition, the upper portion of the distribution contains many more high-cost observations, including several extreme outliers exceeding $60,000.
+
+- The shape of the violin plots also suggests that individuals in the BMI ≥ 30 category are more concentrated within higher insurance charge ranges compared to individuals with BMI below 30. Meanwhile, the BMI < 30 group has a tighter distribution centered around lower and mid-range charge values.
+
+- Overall, the visualization supports the idea that BMI may exhibit a threshold effect around a value of 30, where insurance charges begin to increase more noticeably. Although BMI alone does not perfectly predict insurance cost, individuals with higher BMI values tend to face greater insurance expenses and more variability in charges.
+
+
+```{r}
+insurance <- insurance %>%
+  mutate(
+    bmi_group = ifelse(bmi >= 30, "BMI ≥ 30", "BMI < 30")
+  )
+
+insurance %>%
+  ggplot(aes(x = bmi_group, y = charges, fill = smoker)) +
+  geom_boxplot(alpha = 0.75) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(
+    title = "BMI Threshold and Smoking Status",
+    subtitle = "Charges increase most noticeably for smokers with BMI ≥ 30",
+    x = "BMI Category",
+    y = "Insurance Charges",
+    fill = "Smoker"
+  ) +
+  theme_light(base_size = 16)
+```
+
+- The grouped boxplot combines BMI category and smoking status to better understand how the two variables interact in relation to insurance charges. This visualization reveals that smoking status has a much stronger impact on insurance cost than BMI alone, while also showing that higher BMI values further amplify charges among smokers.
+
+- Among non-smokers, individuals with BMI values below and above 30 have relatively similar insurance charge distributions. Although the BMI ≥ 30 group shows a slightly higher median and somewhat greater variability, most non-smokers remain within a comparatively low insurance charge range overall.
+
+- In contrast, smokers experience dramatically higher insurance charges regardless of BMI category. However, smokers with BMI values greater than or equal to 30 have the highest median charges and the greatest spread of any group in the dataset. Their distribution is concentrated around very high insurance costs, and the group also contains several extreme outliers exceeding $60,000.
+
+- The comparison suggests that BMI and smoking status together create a compounding effect on insurance expenses. While BMI alone has a moderate relationship with insurance charges, its impact becomes substantially stronger when combined with smoking behavior. Overall, the plot demonstrates that smokers with higher BMI values represent the highest-risk and highest-cost group within the dataset.
+
+
+Sarah's Section:
+
+```{r}
+#read and inspect the data
+dat <- read.csv("insurance.csv")
+
+head(dat)
+glimpse(dat)
+
+#check for NA values in each category in case we need to fix anything
+sum(is.na(dat$age))
+sum(is.na(dat$sex))
+sum(is.na(dat$bmi))
+sum(is.na(dat$children))
+sum(is.na(dat$smoker))
+sum(is.na(dat$region))
+sum(is.na(dat$charges))
+
+library(ggplot2)
+library(corrplot)
+
+
+#change data into factors for a correlation matrix
+dat<- dat %>%
+  mutate(sex= factor(sex),
+         smoker= factor(smoker),
+         region= factor(region))
+
+#change from factor with characters to factor with numerical values
+dat<- dat %>%
+  mutate(region= case_when(
+        region== "northwest" ~1,
+        region== "northeast" ~2,
+        region== "southwest" ~3,
+        region== "southeast" ~4
+         ),
+        sex= case_when(
+          sex== "female" ~0,
+          sex== "male" ~1),
+        smoker= case_when(
+          smoker== "yes" ~1,
+          smoker== "no" ~0
+        ))
+
+#create the correlation matrix and plot
+cor_matrix <- cor(dat)
+corrplot(cor_matrix, method = "color", type = "full",
+         col= colorRampPalette(c("#ADD8E6", "white", "#FFA07A"))(200),
+         tl.col = "black", tl.srt = 45, # text label color & rotation
+         addCoef.col = "black",         # add correlation coefficients
+         number.cex = 0.7)              
+```
+
+```{r}
+#for e
+library(ggthemes)
+ggplot(dat, aes(x=factor(children), y=charges, fill=children)) +
+  geom_boxplot() +
+  labs( title= "Charges vs Number of Children",
+        x= "Number of Children",
+        y= "Charges ($)") + 
+  theme_light()
+  
+```
+
+
+- The median charges seem to increase as the number of children increase, up until 5, where the median charges drop. From 3-5 children, the range decreases. For 0-1 children, the range and IQR of charges are similar. So charges typically increase as number of children increase, until 5 children, where charges were much less than charges for families with less children.
+
+```{r}
+#for g
+library(ggthemes)
+smoke_dat<- dat %>%
+  filter(smoker== "yes")
+
+ggplot(dat, aes(x=age, y= charges, color= factor(age))) +
+  geom_point() +
+  facet_wrap(~smoker)+
+  theme_few() +
+  labs( title= "Charges vs. Age by Smoking Status", 
+          x= "Age",
+        y= "Charges ($)")
+```
+
+- It can be seen that non smokers have lower baseline charges than smokers, and both group's charges increase as age increases.
+
+# Grace's Section:
+
+```{r}
+insurance <- read_csv("https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv")
+
+```
+
+```{r}
+# graph the distribution of smokers vs non-smokers in this dataset
+smoking_stat <- dat %>%
+  mutate(smoker = factor(smoker, levels = c(0, 1), labels = c("No", "Yes"))) %>%
+  group_by(smoker) %>%
+  summarise(smoke_totals = n()) %>%
+  ungroup()
+
+ggplot(smoking_stat, aes(x = smoker, y = smoke_totals, fill = smoker)) +
+  geom_col() +
+  labs(
+    title = "Distribution of Smokers",
+    x = "Smoking Status",
+    y = "Count",
+    fill = "Smoker"
+  )
+```
+
+```{r}
+#graph the relationship
+
+ggplot(insurance, aes(x = smoker, y = charges, fill = smoker)) +
+  geom_boxplot() +
+  labs(title = "Charges by Smoking Status")
+```
+
+- The boxplot above shows a very strong correlation with charges related to smokers vs non smokers. We can tell this because the median line for the non-smokers (red) is much lower than that of smokers (blue). A typical smoker costs around $30,000-$40,000 while non-smokers are around $5,000-$10,000. There is obviously a tiny bit of overlap between smokers and non-smokers because of other health factors. However, those people are considered outliers and are not common. 
+
+```{r}
+ggplot(insurance, aes(x = region, y = charges, fill = smoker)) +
+  geom_boxplot() +
+  labs(title = "Insurance Charges by Region and Smoking Status",
+       x = "Region",
+       y = "Charges") +
+  theme_minimal()
+```
+
+- The boxplot shows that smoking status has a significantly larger impact on insurance charges than geographic region. In every region, smokers consistently have much higher median charges compared to non-smokers. While there are slight differences across regions (with the southeast and southwest appearing marginally higher), these differences are small relative to the gap between smokers and non-smokers. This suggests that smoking is a primary driver of insurance cost, while regional variation plays a minor role. Additionally, smokers exhibit greater variability in charges, indicating that other risk factors may further influence pricing within this group.
+
+# Kate's Section:
+
+```{r}
+library(ggplot2)
+data <- read.csv("insurance.csv")
+data
+```
+
+#Age and Charges
+```{r}
+#to get a regression line
+correlation<- cor(data$age, data$charges)
+
+
+data |> ggplot(aes(x=age, y=charges, color=age))+geom_point(alpha=0.5)+
+  labs(title="Relationship between Age and Insurance Charges", x="Age", y="Insurance Charges") +
+  geom_smooth(method=lm,, se= FALSE, col = "red", lwd = 1) +
+  annotate("text", x=-Inf, y=Inf, label= paste("r =", round(correlation, 2)),
+            hjust=-0.5, vjust=1.5, color="red", fontface= "bold")
+  
+```
+
+- The scatterplot and regression line show a positive relationship between age and insurance charges. As age increases, insurance charges generally tend to increase as well. The correlation coefficient of approximately 0.30 indicates a moderate positive relationship between the two variables.
+
+- Although there is still substantial variability in insurance charges across all age groups, older individuals are more frequently associated with higher insurance costs. The upward slope of the regression line further supports this trend and suggests that age is one of the stronger numerical predictors of insurance charges within the dataset.
+
+- The visualization also reveals several high-cost outliers across different age groups, indicating that additional variables beyond age likely influence insurance expenses. Overall, the plot suggests that age has a noticeable positive relationship with insurance charges, but it is not the sole determining factor behind higher insurance costs.
+
+```{r}
+#get the correlations for each smoking group
+cor_no<- cor(dat$age[dat$smoker== "no"], dat$charges[dat$smoker=="no"])
+cor_yes<- cor(dat$age[dat$smoker== "yes"], dat$charges[dat$smoker=="yes"])
+
+#graph to show difference in charges with the correlations
+data |> ggplot(aes(x=age, y=charges, color=smoker))+geom_point(alpha=0.5)+labs(title="Age and Insurance Charges for Smokers v Non-Smokers", x="Age", y="Insurance Charges") + geom_smooth(method= lm, se= FALSE) +
+  scale_color_discrete(labels= c(paste("no, (r = ", round(cor_no,2), ")"),
+                                 paste("yes, (r = ", round(cor_yes, 2), ")")))
+```
+
+
+- Separating the data by smoking status reveals a much clearer relationship between age and insurance charges. Both smokers and non-smokers show increasing insurance charges as age increases, but smokers consistently experience substantially higher insurance costs across nearly all age groups.
+
+- The regression lines and correlation values suggest that age has a positive relationship with insurance charges for both groups. However, smokers occupy a much higher charge range overall and also display greater variability in insurance expenses. Many of the highest-cost observations in the dataset are concentrated among smokers, particularly at older ages.
+
+- The plot also demonstrates that smoking status creates a noticeable separation between the two groups. Even younger smokers often have higher insurance charges than older non-smokers, emphasizing the significant impact of smoking behavior on insurance cost. Overall, the visualization suggests that while age contributes to increasing insurance charges, smoking status greatly amplifies those costs and plays a much stronger role in determining high insurance expenses. 
+
+#Region and Charges
+
+```{r}
+#graph to show the relationship between region and charges
+data |> ggplot(aes(x=factor(region), y=charges, fill=region))+geom_boxplot()+labs(title="Relationship between Region and Insurance Charges", x="Regions", y="Insurance Charges")
+
+```
+
+- The boxplot comparing insurance charges across regions suggests that geographic region has only a moderate relationship with insurance costs. While the distributions vary slightly between regions, the overall spreads overlap considerably, indicating that region alone is not a strong predictor of insurance charges.
+
+- Among the four regions, the southeast appears to have the highest median insurance charges and the greatest variability overall. It also contains several extreme high-cost outliers, including some of the highest insurance charges in the dataset. In contrast, the northwest and southwest regions show slightly lower median charges and somewhat tighter distributions.
+
+- Despite these differences, all four regions contain a wide range of insurance charges and numerous outliers. This suggests that factors such as smoking status, age, and BMI likely have a much stronger influence on insurance expenses than geographic location alone. Overall, the visualization indicates that regional variation exists, but its effect on insurance charges is relatively limited compared to other variables analyzed throughout the project.
+
+```{r}
+#to show the distribution of regions among the dataset
+dat_region<- data %>%
+  group_by(region) %>%
+  summarise(region_counts= n()) %>%
+  ungroup()
+
+
+ggplot(dat_region,aes(x= region, fill=region)) +
+  geom_bar(aes(weight= region_counts)) +
+  labs(title= "Distribution of Regions",
+       x= "Region",
+       y="count")
+```
+
+
+- The bar chart shows that the observations in the dataset are distributed relatively evenly across all four geographic regions. Although the southeast contains slightly more observations than the other regions, no single region overwhelmingly dominates the dataset.
+
+- This relatively balanced regional distribution helps reduce the likelihood of strong geographic bias influencing the analyses performed throughout the project. Because each region is represented with a similar number of observations, comparisons involving regional insurance charges are more reliable and less likely to be distorted by unequal sample sizes.
+
+- Overall, the visualization suggests that the dataset provides a fairly balanced representation of individuals from different regions, allowing for more meaningful comparisons between geographic groups.
+
+```{r}
+# Summary Statistics by Smoking Status
+
+insurance %>%
+  group_by(smoker) %>%
+  summarize(
+    Average_Charge = round(mean(charges), 2),
+    Median_Charge = round(median(charges), 2),
+    Average_BMI = round(mean(bmi), 2),
+    Average_Age = round(mean(age), 2)
+  )
+```
+
+
+- The summary statistics reinforce many of the patterns observed throughout the visual analyses. Smokers have substantially higher average and median insurance charges compared to non-smokers. On average, smokers are charged approximately $32,050, while non-smokers average around $8,434. Similarly, the median insurance charge for smokers is over $34,000 compared to roughly $7,345 for non-smokers.
+
+- In contrast, the average BMI and average age between smokers and non-smokers are relatively similar. Both groups have nearly identical average BMI values around 30.7 and average ages close to 39 years old. This suggests that the dramatic difference in insurance charges cannot simply be explained by age or BMI differences alone.
+
+- Overall, the table strongly supports the conclusion reached throughout the project that smoking status is one of the most significant factors associated with higher insurance costs in the dataset.
+
+# Overall Findings
+
+- Across the project, smoking status consistently appeared to be the strongest predictor of insurance charges. Smokers generally experienced substantially higher insurance costs than non-smokers across nearly all visualizations and subgroup comparisons.
+
+- Age and BMI also showed positive relationships with insurance charges. In particular, individuals with BMI values greater than or equal to 30 tended to experience higher costs, especially among smokers. While sex and region showed some differences in distributions, their effects were much smaller compared to smoking status.
+
+- The correlation analysis further supported these findings by showing that age and BMI had moderate positive relationships with insurance charges, while the number of children had only a weak relationship. Overall, the project suggests that insurance cost is influenced by multiple interacting factors, with smoking status playing the most significant role.

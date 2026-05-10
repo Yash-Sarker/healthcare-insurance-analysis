@@ -1,0 +1,30 @@
+---
+title: "Final Project Part"
+output: html_document
+date: "2026-05-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+data <- read.csv("insurance.csv")
+data
+```
+
+
+#Age and Charges
+```{r}
+data |> ggplot(aes(x=age, y=charges))+geom_point(alpha=0.5)+labs(title="Relationship between Age and Insurance Charges", x="Age", y="Insurance Charges")
+```
+```{r}
+data |> ggplot(aes(x=age, y=charges, color=smoker))+geom_point(alpha=0.5)+labs(title="Age and Insurance Charges for Smokers v Non-Smokers", x="Age", y="Insurance Charges")
+```
+
+#Region and Charges
+
+```{r}
+data |> ggplot(aes(x=factor(region), y=charges, fill=region))+geom_boxplot()+labs(title="Relationship between Region and Insurance Charges", x="Regions", y="Insurance Charges")
+```
