@@ -269,11 +269,21 @@ ggplot(dat, aes(x=factor(children), y=charges, fill=children)) +
         x= "Number of Children",
         y= "Charges ($)") + 
   theme_light()
+
+
   
 ```
 
 
 - The median charges seem to increase as the number of children increase, up until 5, where the median charges drop. From 3-5 children, the range decreases. For 0-1 children, the range and IQR of charges are similar. So charges typically increase as number of children increase, until 5 children, where charges were much less than charges for families with less children.
+
+```{r}
+ggplot(insurance, aes(x= sex, fill = sex)) +
+  geom_bar() 
+  
+```
+
+We can see that our data contains a very similar amount of males and females. 
 
 ```{r}
 #for g

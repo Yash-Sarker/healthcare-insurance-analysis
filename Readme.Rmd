@@ -103,6 +103,21 @@ The scatterplots comparing age and insurance charges showed a clear positive rel
 
 Although the relationship was not perfectly linear, older individuals consistently experienced higher insurance charges overall. The visualizations also showed that age alone could not fully explain insurance costs, since some younger individuals still experienced unusually large insurance charges.
 
-When smoking status was incorporated into the analysis, the separation between smokers and non-smokers became much clearer, especially among older individuals.
+When smoking status was incorporated into the analysis, the separation between smokers and non-smokers became much clearer, especially among older individuals. Smokers had higher base charges, which continued to increase as smokers got older. Non-smokers had a lower base charge, but charges still increased as they got older. Interestingly, there was a higher correlation between non-smokers, age and charges than smokers, ages, and charges. 
+
+Overall, we see that insurance charges increased as age increased, showing a positive relationship. We also saw that older smokers did have higher charges than younger smokers. 
 
 
+## Sex and Charges
+
+
+
+## BMI, thresholds, and Charges
+
+## Charges and Children
+
+## Regions and Charges
+
+## Smoking, Region, and Charges
+
+## Critics and Improvements
