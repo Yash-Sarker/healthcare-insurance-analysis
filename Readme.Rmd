@@ -110,9 +110,13 @@ Overall, we see that insurance charges increased as age increased, showing a pos
 
 ## Sex and Charges
 
+Our data contains a very similar amount of males and females, an important note for our analysis on the effect sex has insurance charges. Overall, males and females are charged at similar rates. Men have slightly higher charges, as well as a slightly greater IQR of charges, but the distributions between males and females are very similar.
 
+Due to the overlap in the distributions between males and females, we wanted to look closer to see if smoking had a major effect on the charges between the sexes. Based on our faceted bloxplots, we see that smokers, regardless of sex, are charged more. However, there is practically no difference between the insurance charges of males and females for both smokers and non-smokers. 
 
 ## BMI, thresholds, and Charges
+
+
 
 ## Charges and Children
 
