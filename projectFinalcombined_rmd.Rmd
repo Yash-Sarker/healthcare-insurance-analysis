@@ -370,11 +370,12 @@ data |> ggplot(aes(x=age, y=charges, color=age))+geom_point(alpha=0.5)+
   
 ```
 
-- The scatterplot and regression line show a positive relationship between age and insurance charges. As age increases, insurance charges generally tend to increase as well. The correlation coefficient of approximately 0.30 indicates a moderate positive relationship between the two variables.
+- The scatterplot and regression line show a clear positive relationship between age and insurance charges. The correlation coefficient of approximately 0.30, which indicates a moderate positive relationship between the two variables.
 
-- Although there is still substantial variability in insurance charges across all age groups, older individuals are more frequently associated with higher insurance costs. The upward slope of the regression line further supports this trend and suggests that age is one of the stronger numerical predictors of insurance charges within the dataset.
+- There is a increase of approximately \$15000 between the ages of 18 and 64. This is approximately a $325 increase per additional year of age.
 
-- The visualization also reveals several high-cost outliers across different age groups, indicating that additional variables beyond age likely influence insurance expenses. Overall, the plot suggests that age has a noticeable positive relationship with insurance charges, but it is not the sole determining factor behind higher insurance costs.
+- Three distinct groups are present in this graph, with prices starting at about \$2000, \$18,000, and \$35,000 at 18 years old. Between the three groups, the insurance cost increases at approximately the same rate. With this information we can determine that while age affects insurance costs, it affects most people at a steady rate of increase, but the base cost is due to another factor.
+
 
 ```{r}
 #get the correlations for each smoking group
@@ -388,11 +389,9 @@ data |> ggplot(aes(x=age, y=charges, color=smoker))+geom_point(alpha=0.5)+labs(t
 ```
 
 
-- Separating the data by smoking status reveals a much clearer relationship between age and insurance charges. Both smokers and non-smokers show increasing insurance charges as age increases, but smokers consistently experience substantially higher insurance costs across nearly all age groups.
+- Factoring the data by smoking status creates a clearer picture on the three groups created. The bottom group with the lowest insurance charges are composed of only non-smokers. The top group (with the highest insurance charges) is composed of only smokers. The middle group is composed of both smokers and non smokers. This region could include mild smokers and non-smokers with other health conditions.
 
-- The regression lines and correlation values suggest that age has a positive relationship with insurance charges for both groups. However, smokers occupy a much higher charge range overall and also display greater variability in insurance expenses. Many of the highest-cost observations in the dataset are concentrated among smokers, particularly at older ages.
-
-- The plot also demonstrates that smoking status creates a noticeable separation between the two groups. Even younger smokers often have higher insurance charges than older non-smokers, emphasizing the significant impact of smoking behavior on insurance cost. Overall, the visualization suggests that while age contributes to increasing insurance charges, smoking status greatly amplifies those costs and plays a much stronger role in determining high insurance expenses. 
+- Overall, age is the primary factor for increases in insurance costs over time, no matter the health of the patient, but smoking status determines the base rate and therefore is the driving factor of insurance cost.
 
 #Region and Charges
 
