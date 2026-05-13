@@ -6,8 +6,8 @@ Nilutpaul Sarker Yash, Kate Passwater, Grace Schmitt, Sarah Bass
 
 Healthcare insurance costs can vary widely between individuals, and
 personal lifestyle and demographic factors often explain these
-differences. Variables such as age, BMI, smoking status, number of
-dependents, sex, and region may all play a role in shaping how much an
+differences. Variables such as Age, BMI, smoking status, Number of
+Dependents, Sex, and Region may all play a role in shaping how much an
 individual is charged for medical insurance.
 
 The purpose of this project is to explore which factors are most
@@ -26,16 +26,16 @@ healthcare insurance charges.
 ## Description of the Data
 
 The dataset used for this project was obtained from Kaggle and contains
-information about healthcare insurance costs and several personal
-demographic and lifestyle-variables such as age, sex, bmi, number of
-dependents and smoking status.
+information on healthcare insurance costs and several personal
+demographic and lifestyle-variables such as Age, Sex, BMI, Number of
+Dependents and Smoking Status.
 
 Dataset Source:
 <https://www.kaggle.com/datasets/willianoliveiragibin/healthcare-insurance>
 
 The dataset contains 1,338 observations and 7 variables, including both
-numerical variables (age, BMI, number of children, and insurance
-charges) and categorical variables (sex, smoking status, and region).
+numerical (age, BMI, number of children, and insurance charges) and
+categorical (sex, smoking status, and region) variables.
 
 The variables included in the dataset are:
 
@@ -51,8 +51,8 @@ The variables included in the dataset are:
 
 Before beginning the analysis, the dataset was inspected for missing
 values, variable types, and general structure. Several categorical
-variables were converted into factors to improve the visualization and
-exploratory analysis process. Additional grouped variables and summary
+variables were converted into factors to improve visualization and
+exploratory analysis. Additional grouped variables and summary
 comparisons were also created throughout the project to better analyze
 interactions between variables such as smoking status, BMI, and age.
 
@@ -68,7 +68,8 @@ data collected:
 2)  Sex and Charges – Do insurance charges differ by sex?
 
 3)  BMI and Charges - Is there a relationship between BMI and insurance
-    charges & is there a threshold where charges increase significantly?
+    charges, and is there a threshold where charges increase
+    significantly?
 
 4)  Smoker and Charges - Does smoking increase insurance charges?
 
@@ -105,7 +106,7 @@ and exploratory analysis techniques were used throughout the project.
 - Faceted visualizations
 - Distribution comparisons
 
-### Ggraphing and visualizing techniques we used:
+### Graphing and Visualization techniques we used:
 
 - Customized axis labels
 - Cohesive color schemes (utilizing polishing plots techniques)
@@ -115,3 +116,196 @@ and exploratory analysis techniques were used throughout the project.
 - Simplified layouts for presentations
 
 ## Exploratory Data Analysis & Findings:
+
+Before answering any of our questions, we wanted to ensure the data was
+clean. Our data contained no NA values or duplicates, so we were able to
+proceed to the next step.
+
+Before diving deeper into the analysis, we wanted to provide a brief
+overview of the relationships between individual variables and health
+insurance costs. Thus, we used a correlation matrix and a heatmap. To do
+so, we changed all non-numerical categorical variables to factors and
+created a heatmap.
+
+<img src="images/01_correlation_matrix_heatmap.png" width="700">
+
+Although the correlation matrix and heatmap show that age has the
+strongest positive relationship with insurance charges, followed by BMI,
+we did not observe any extremely strong linear relationships. This led
+us to work with one key variable in mind: insurance charges are likely
+affected by multiple interacting factors rather than a single dominant
+variable. Thus, we decided to explore the effects of some combinations
+of the variables in our dataset on insurance.
+
+### Smoking Status and Insurance Charges
+
+Although the data we collected contains significantly more non-smokers
+than smokers, our analysis showed that smoking status had one of the
+strongest relationships with healthcare insurance charges in the
+dataset. Smokers consistently displayed substantially higher insurance
+costs compared to non-smokers across nearly every visualization used in
+the project.
+
+The boxplots and distribution comparisons showed that smokers not only
+had higher median insurance charges but also much greater variability
+and more extreme outliers. This suggests that smoking may significantly
+increase long-term healthcare expenses and associated insurance costs.
+
+<img src="images/11_charges_by_smoking_status_boxplot.png" width="700">
+
+Additionally, smoking status became even more important when combined
+with other variables such as BMI and age, suggesting that smoking
+amplifies the effects of other health-related factors.
+
+### Age and Insurance Charges
+
+The scatterplots comparing age and insurance charges showed a clear
+positive relationship between the two variables. In general, insurance
+costs tended to increase as individuals became older.
+
+Although the relationship was not perfectly linear, older individuals
+consistently experienced higher insurance charges overall. The
+visualizations also showed that age alone could not fully explain
+insurance costs, since some younger individuals still experienced
+unusually large insurance charges.
+
+When smoking status was incorporated into the analysis, the separation
+between smokers and non-smokers became much clearer, especially among
+older individuals. Smokers had higher base charges, which continued to
+increase as smokers got older. Non-smokers had a lower base charge, but
+charges still increased with age. Interestingly, there was a higher
+correlation between non-smokers, age and charges than smokers, ages, and
+charges.
+
+<img src="images/13_age_vs_charges_scatter_regression.png" width="700">
+
+<img src="images/14_age_vs_charges_smokers_vs_nonsmokers.png" width="700">
+
+Overall, we see that insurance charges increased with age, indicating a
+positive relationship. We also saw that older smokers had higher charges
+than younger smokers.
+
+## Sex and Charges
+
+Our data contains a very similar amount of males and females, an
+important note for our analysis of the effect sex has insurance charges.
+Overall, males and females are charged at similar rates. Men have
+slightly higher charges and a slightly greater IQR, but the
+distributions between males and females are very similar.
+
+<img src="images/02_sex_charges_violin_boxplot.png" width="700">
+
+Due to overlap in the distributions between males and females, we wanted
+to look closer to see whether smoking had a major effect on the charges
+between the sexes. Based on our faceted blox plots, we see that smokers,
+regardless of sex, are charged more. However, there is practically no
+difference between the insurance charges of males and females for both
+smokers and non-smokers.
+
+## BMI, thresholds, and Charges
+
+To better see the relationship between BMI and charges, we grouped by
+smoking status. Our scatterplot shows that for non-smokers, insurance
+charges remained relatively low across all BMI values. For smokers, we
+can see that as BMI increases, charges also increase.
+
+<img src="images/04_bmi_charges_by_smoking_status_scatter.png" width="700">
+
+To evaluate whether there was a threshold at which costs increased
+significantly, we created box plots for smokers and non-smokers above
+and below the BMI of 30. We chose 30 as the threshold because in the
+United States, a BMI of 30 or above is considered obese.
+
+From our box plots, we can see that those with a BMI of 30 or above
+generally experience higher insurance charges than those with a BMI
+below 30. Those above the threshold also had a higher range and IQR of
+charges.
+
+<img src="images/05_bmi_threshold_charges_violin_boxplot.png" width="700">
+
+## Charges and Children
+
+To evaluate the relationship between the number of children in a family
+and insurance charges, we created boxplots of the 6 groups in the data.
+We see that families with 4 children have the highest median charges,
+and that the relationship between charges and number of children is
+positive for those with 1-4 children.
+
+<img src="images/07_children_vs_charges_boxplot.png" width="700">
+
+Interestingly, we see that those with 5 children have the lowest median
+insurance charges, and the lowest variability. This could be due to a
+lack of families in the data with 5 children, leading to a lower
+representation of the population with 5 children.
+
+## Regions and Charges
+
+Our data showed a fairly even spread of families across all 4 regions.
+
+<img src="images/16_region_distribution_bar_chart.png" width="650">
+
+In comparing the charges by region, we see that all distributions were
+very similar.
+
+<img src="images/15_region_vs_charges_boxplot.png" width="700">
+
+The southeast had a slightly greater IQR and median charge than any
+other region, which makes sense, since many people move to the southeast
+after retiring.
+
+As seen from our earlier study, as age increases, insurance charges
+increase. This could be why the southeast has greater variability in
+charges.
+
+We also investigated whether a specific region of smokers were charged
+more than others. To do so, we compared the distributions of insurance
+charges of smokers in each region with those of non-smokers.
+
+<img src="images/12_region_charges_by_smoking_status.png" width="700">
+
+As expected, non-smokers were charged less in all regions than smokers,
+and their distributions were roughly the same across regions. For
+smokers, those in the South had greater median charges than those in the
+North, but similar variability.
+
+We can conclude that smokers in the South are charged slightly more, but
+insurance charges of smokers do not change very much across regions.
+
+## Key Takeaways
+
+Overall, smoking status appeared to be the strongest predictor of
+healthcare insurance charges throughout the project. Smokers
+consistently experienced much higher insurance costs than non-smokers
+across nearly every visualization. Age and BMI also showed positive
+relationships with insurance charges, especially among smokers and
+individuals with BMI values above 30.
+
+While variables such as sex and region showed some differences in
+distributions, their effects were relatively small compared to smoking
+status, age, and BMI. Overall, the project demonstrated that insurance
+charges are influenced by multiple interacting lifestyle and demographic
+factors rather than a single variable alone.
+
+## Criticisms, Limitations, and Possible Improvements
+
+Although the dataset helped reveal several important relationships, the
+analysis still contains some limitations. First, the dataset only
+contained 1,338 observations, which may not fully represent the broader
+population. Some groups, such as families with five children, had
+relatively few observations, which may have affected certain trends in
+the visualizations.
+
+Additionally, the dataset did not contain information about specific
+diseases, illnesses, medical history, or other health conditions of
+individuals. Including this information could have helped explain
+insurance costs more accurately.
+
+The dataset also only included BMI values rather than separate height
+and weight measurements. Having access to individual height and weight
+variables could have allowed for a more detailed analysis of obesity and
+body composition.
+
+Finally, while several strong correlations and trends were identified
+throughout the project, correlation does not necessarily imply
+causation. Some variables may appear related because of other underlying
+factors not included in the dataset.
