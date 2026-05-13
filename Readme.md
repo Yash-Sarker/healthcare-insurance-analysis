@@ -127,15 +127,20 @@ insurance costs. Thus, we used a correlation matrix and a heatmap. To do
 so, we changed all non-numerical categorical variables to factors and
 created a heatmap.
 
-<img src="images/01_correlation_matrix_heatmap.png" width="700">
+<img src="images/01_full_correlation_matrix_with_factors.png" width="700">
 
-Although the correlation matrix and heatmap show that age has the
-strongest positive relationship with insurance charges, followed by BMI,
-we did not observe any extremely strong linear relationships. This led
-us to work with one key variable in mind: insurance charges are likely
-affected by multiple interacting factors rather than a single dominant
-variable. Thus, we decided to explore the effects of some combinations
-of the variables in our dataset on insurance.
+Although the correlation matrix and heatmap show that smoking status has
+the strongest positive relationship with insurance charges, age and BMI
+also display moderate positive relationships with insurance cost. In
+contrast, variables such as sex, region, and number of children appear
+to have relatively weak relationships with insurance charges overall.
+
+The heatmap also suggests that no single variable alone perfectly
+explains insurance costs. Instead, insurance charges are likely
+influenced by multiple interacting demographic and lifestyle-related
+factors. This led us to further investigate how variables such as
+smoking status, BMI, and age interact with one another throughout the
+project.
 
 ### Smoking Status and Insurance Charges
 

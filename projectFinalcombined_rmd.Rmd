@@ -266,11 +266,15 @@ dat<- dat %>%
 
 #create the correlation matrix and plot
 cor_matrix <- cor(dat)
+
+png("images/01_full_correlation_matrix_with_factors.png", width = 1000, height = 800)
 corrplot(cor_matrix, method = "color", type = "full",
          col= colorRampPalette(c("#ADD8E6", "white", "#FFA07A"))(200),
          tl.col = "black", tl.srt = 45, # text label color & rotation
          addCoef.col = "black",         # add correlation coefficients
          number.cex = 0.7)
+
+dev.off()
 ```
 
 ```{r}
